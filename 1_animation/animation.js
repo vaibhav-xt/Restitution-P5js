@@ -31,16 +31,16 @@ function setup() {
     ]
 
     mgUpPoints = [
-        [width * 0.23, height * 0.45, width * 0.07, height * 0.15],
-        [width * 0.33, height * 0.48, width * 0.07, height * 0.15],
-        [width * 0.43, height * 0.51, width * 0.07, height * 0.15],
-        [width * 0.53, height * 0.54, width * 0.07, height * 0.15],
+        [width * 0.22, height * 0.47, width * 0.07, height * 0.15],
+        [width * 0.32, height * 0.47, width * 0.07, height * 0.15],
+        [width * 0.42, height * 0.47, width * 0.07, height * 0.15],
+        [width * 0.52, height * 0.47, width * 0.07, height * 0.15],
     ]
 
     mgDownPoints = [
-        [width * 0.26, height * 0.79, width * 0.05, height * 0.1],
-        [width * 0.36, height * 0.76, width * 0.05, height * 0.1],
-        [width * 0.46, height * 0.73, width * 0.05, height * 0.1],
+        [width * 0.26, height * 0.71, width * 0.07, height * 0.15],
+        [width * 0.36, height * 0.71, width * 0.07, height * 0.15],
+        [width * 0.46, height * 0.71, width * 0.07, height * 0.15],
     ]
 
     plusUpward = [
@@ -96,7 +96,9 @@ function draw() {
 function sizeText(label, xText, yText, size = width * 0.025) {
     push();
     textSize(size);
-    text(label, xText, yText);
+    translate(xText, yText)
+    rotate(0)
+    text(label, 0, 0);
     pop();
 }
 
@@ -128,8 +130,8 @@ function drawArrow(xArrow, yArrow, arrowLength, label) {
 function mousePressed() {
     for (let i = 0; i < 7; i++) {
         if (initialPoints[i][4] === 0) {
-            if (mouseX < initialPoints[i][0] + 20 &&
-                mouseX > initialPoints[i][0] - 20 &&
+            if (mouseX < initialPoints[i][0] + 10 &&
+                mouseX > initialPoints[i][0] - 10 &&
                 mouseY > (initialPoints[i][1]) &&
                 mouseY < initialPoints[i][1] + initialPoints[i][2]
             ) {
@@ -139,8 +141,8 @@ function mousePressed() {
 
         if (initialPoints[i][4] === 180) {
             if (
-                mouseX < initialPoints[i][0] + 20 &&
-                mouseX > initialPoints[i][0] - 20 &&
+                mouseX < initialPoints[i][0] + 10 &&
+                mouseX > initialPoints[i][0] - 10 &&
                 mouseY > (initialPoints[i][1] - initialPoints[i][2]) &&
                 mouseY < initialPoints[i][1]
             ) {
@@ -168,8 +170,8 @@ function mouseDragged() {
     }
 }
 
-function magnet() {
-    let initialPointsClone = [
+function initialPointsClone() {
+    return [
         // Arrows arguments [x, y, arrowLength, label, degree]
         [width * 0.15, height * 0.1, width * 0.2, `t0`, 0],
         [width * 0.3, height * 0.3, width * 0.15, "", 180],
@@ -179,6 +181,10 @@ function magnet() {
         [width * 0.70, height * 0.30, width * 0.05, "", 180],
         [width * 0.75, height * 0.25, width * 0.05, "t3", 0]
     ];
+}
+
+function magnet() {
+    let clonePonints = initialPointsClone();
 
     for (let i = 0; i < initialPoints.length; i++) {
         if (isDragging[i]) {
@@ -192,13 +198,15 @@ function magnet() {
                     ) {
                         const mgX =
                             mgUpPoints[j][0] + mgUpPoints[j][2] / 2;
+                        const mgY =
+                            mgUpPoints[j][1] + mgUpPoints[j][3] / 2;
                         initialPoints[i][0] = mgX;
-                        initialPoints[i][1] = mgUpPoints[j][1];
+                        initialPoints[i][1] = mgY - initialPoints[i][2] / 2;
                         break
                     } else {
                         // If not aligned with any magnetic point, reset the position
-                        initialPoints[i][0] = initialPointsClone[i][0];
-                        initialPoints[i][1] = initialPointsClone[i][1];
+                        initialPoints[i][0] = clonePonints[i][0];
+                        initialPoints[i][1] = clonePonints[i][1];
                     }
                 }
             } else if (initialPoints[i][4] === 180) {
@@ -212,14 +220,15 @@ function magnet() {
                         const mgX =
                             mgDownPoints[j][0] + mgDownPoints[j][2] / 2;
                         const mgY =
-                            mgDownPoints[j][1] + mgDownPoints[j][3];
+                            mgDownPoints[j][1] + mgDownPoints[j][3] / 2;
                         initialPoints[i][0] = mgX;
-                        initialPoints[i][1] = mgY;
+                        initialPoints[i][1] = mgY + initialPoints[i][2] / 2;
+                        console.log(initialPoints[i], mgUpPoints[j])
                         break;
                     } else {
                         // If not aligned with any magnetic point, reset the position
-                        initialPoints[i][0] = initialPointsClone[i][0];
-                        initialPoints[i][1] = initialPointsClone[i][1];
+                        initialPoints[i][0] = clonePonints[i][0];
+                        initialPoints[i][1] = clonePonints[i][1];
                     }
                 }
             }
@@ -228,34 +237,51 @@ function magnet() {
 }
 
 function verify() {
-    if (initialPoints[0][0] > mgUpPoints[0][0] &&
+    if (
+        initialPoints[0][0] > mgUpPoints[0][0] &&
         initialPoints[0][0] < mgUpPoints[0][0] + mgUpPoints[0][2] &&
-        initialPoints[0][1] === mgUpPoints[0][1])
+        initialPoints[0][1] < mgUpPoints[0][1]
+    )
 
-        if (initialPoints[2][0] > mgUpPoints[1][0] &&
-            initialPoints[2][0] < mgUpPoints[1][0] + mgUpPoints[2][2] &&
-            initialPoints[2][1] === mgUpPoints[1][1])
+        if (
+            initialPoints[2][0] > mgUpPoints[1][0] &&
+            initialPoints[2][0] < mgUpPoints[1][0] + mgUpPoints[1][2] &&
+            initialPoints[2][1] === mgUpPoints[1][1]
+        )
 
-            if (initialPoints[4][0] > mgUpPoints[2][0] &&
+            if (
+                initialPoints[4][0] > mgUpPoints[2][0] &&
                 initialPoints[4][0] < mgUpPoints[2][0] + mgUpPoints[2][2] &&
-                initialPoints[4][1] === mgUpPoints[2][1])
+                initialPoints[4][1] > mgUpPoints[2][1]
+            )
 
-                if (initialPoints[6][0] > mgUpPoints[3][0] &&
+                if (
+                    initialPoints[6][0] > mgUpPoints[3][0] &&
                     initialPoints[6][0] < mgUpPoints[3][0] + mgUpPoints[3][2] &&
-                    initialPoints[6][1] === mgUpPoints[3][1])
+                    initialPoints[6][1] > mgUpPoints[3][1]
+                )
 
-                    if (initialPoints[1][0] > mgDownPoints[0][0] &&
+                    if (
+                        initialPoints[1][0] > mgDownPoints[0][0] &&
                         initialPoints[1][0] < mgDownPoints[0][0] + mgDownPoints[0][2] &&
-                        initialPoints[1][1] === mgDownPoints[0][1] + mgDownPoints[0][3])
+                        initialPoints[1][1] > mgDownPoints[0][1]
+                    )
 
-                        if (initialPoints[3][0] > mgDownPoints[1][0] &&
+                        if (
+                            initialPoints[3][0] > mgDownPoints[1][0] &&
                             initialPoints[3][0] < mgDownPoints[1][0] + mgDownPoints[1][2] &&
-                            initialPoints[3][1] === mgDownPoints[1][1] + mgDownPoints[0][3])
+                            initialPoints[3][1] > mgDownPoints[1][1]
+                        )
 
-                            if (initialPoints[5][0] > mgDownPoints[2][0] &&
+                            if (
+                                initialPoints[5][0] > mgDownPoints[2][0] &&
                                 initialPoints[5][0] < mgDownPoints[2][0] + mgDownPoints[2][2] &&
-                                initialPoints[5][1] === mgDownPoints[2][1] + mgDownPoints[2][3])
+                                initialPoints[5][1] > mgDownPoints[2][1]
+                            )
+
                                 return true;
+    // Arrow to original Position 
+    initialPoints = initialPointsClone();
     return false;
 }
 
