@@ -1,5 +1,5 @@
 // Aspect Ratio 1:1
-const widthHeight = 700;
+const widthHeight = 500;
 
 let initialPoints = [];
 let isDragging = [];
@@ -74,8 +74,8 @@ function draw() {
     // Ball
     ballPath();
 
-    sizeText("T(upward) = ", width * 0.05, height * 0.55, 0, width * 0.03);
-    sizeText("T(downward) = ", width * 0.05, height * 0.8, 0, width * 0.03);
+    sizeText("T(Downward) = ", width * 0.05, height * 0.55, 0, width * 0.03);
+    sizeText("T(Upward) = ", width * 0.1, height * 0.8, 0, width * 0.03);
 
 
     for (let i = 0; i < plusUpward.length; i++) {
@@ -105,7 +105,6 @@ function ballPath() {
     push();
     noFill();
     stroke(0, 0, 0, 50);
-    stroke(0, 0, 0, 50);
     beginShape();
     curveVertex(width * 0.16, height * 0.34);
     curveVertex(width * 0.16, height * 0.05);
@@ -121,12 +120,11 @@ function ballPath() {
     pop();
 
     push()
-    stroke(0, 0, 0, 50);
-    fill(255, 255, 255, 200);
-    circle(width * 0.19, height * 0.07, width * 0.05)
-    circle(width * 0.37, height * 0.10, width * 0.05)
-    circle(width * 0.56, height * 0.15, width * 0.05)
-    circle(width * 0.72, height * 0.23, width * 0.05)
+    fill(255, 255, 255);
+    circle(width * 0.16, height * 0.07, width * 0.05)
+    circle(width * 0.32, height * 0.10, width * 0.05)
+    circle(width * 0.52, height * 0.15, width * 0.05)
+    circle(width * 0.70, height * 0.24, width * 0.05)
     pop()
 }
 

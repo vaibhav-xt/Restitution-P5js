@@ -1,16 +1,17 @@
-const widthHeight = 700;
-let circleX;
+const widthHeight = 500;
 let slider;
 let playFlag = false;
-let startTime;
-let duration = 1000;
+let bounceBackFlag = false;
+let ballBounce = {
+    speed: 1,
+    direction: "down"
+};
+let variableArrowLength;
 
 function setup() {
     createCanvas(widthHeight, widthHeight);
     background(220);
     angleMode(DEGREES);
-    circleX = width * 0.475;
-
 
     // Slider 
     slider = createSlider(0, 1, 0.5, 0.1);
@@ -20,40 +21,49 @@ function setup() {
 
 function draw() {
     background(220);
+    // example();
     playFlag ? bouncingBall() : example();
     playButton();
 }
 
 function bouncingBall() {
+    const { speed, direction } = ballBounce;
     // Line
     line(width * 0.3, height * 0.5, width * 0.7, height * 0.5);
 
-    arrowRotation(width * 0.4, height * 0.18, width * 0.29, 0, 2);
-    textDisplay(`t1= 1sec`, width * 0.28, height * 0.3)
+    arrowRotation(width * 0.4, height * 0.16, bounceBackFlag ? width * 0.32 : height * 0.04 + speed * 5.05, 0, 2);
+    textDisplay(`t1= 1sec`, width * 0.28, height * 0.45)
 
-    arrowRotation(width * 0.6, height * 0.5, height * slider.value() * 0.3, 180, 2);
-    textDisplay(`t2= ${slider.value()}sec`, width * 0.68, height * 0.3)
+    arrowRotation(width * 0.6, height * 0.5, bounceBackFlag ? slider.value() === 0 ? 0 : width * 0.5 - (height * 0.18 + speed * 5) : 0, 180, 2);
+    textDisplay(`t2= ${slider.value()}sec`, width * 0.65, height * 0.45)
 
-    // // Circle
-    // circle(width * 0.50, height * 0.18, width * 0.08);
+    const ballY = height * 0.2 + speed * 5;
+    circle(width * 0.50, ballY, width * 0.08);
 
-    // let progress = (millis() - startTime) / duration;
-    // if (progress > 1) {
-    //     progress = 1;
-    // }
+    if (direction === "down") {
+        if (ballY + width * 0.04 < height * 0.5) {
+            ballBounce.speed += 0.5;
+        } else {
+            ballBounce.direction = "up";
+            bounceBackFlag = true;
+        }
+    }
 
-    // // Interpolate the circle's Y position
-    // let targetY = height * 0.5 - width * 0.04; // Position at the line
-    // circleY = lerp(height * 0.18, targetY, progress);
-
-    // Circle 
-    circle(circleX, circleY, width * 0.08);
+    if (slider.value() !== 0) {
+        if (direction === "up") {
+            if (variableArrowLength < ballY) {
+                ballBounce.speed -= 0.5;
+            }
+        }
+    }
 }
+
+
 
 function example() {
     // Arrows 
-    arrowRotation(width * 0.4, height * 0.18, width * 0.1, 0);
-    arrowRotation(width * 0.6, height * 0.8 - (height * 0.3 + height * slider.value() * 0.2), width * 0.1, 180);
+    arrowRotation(width * 0.4, height * 0.18, width * 0.3, 0);
+    arrowRotation(width * 0.6, height * 0.5, width * slider.value() * 0.3, 180);
 
     // Text 
     textDisplay('V(approach)', width * 0.33, height * 0.15);
@@ -76,7 +86,8 @@ function playButton() {
     button = createButton("Play");
     button.position(width * 0.47, height * 0.8)
     button.mousePressed(() => {
-        playFlag = true
+        playFlag = true;
+        variableArrowLength = height * 0.5 - width * slider.value() * 0.3;
     })
 }
 
