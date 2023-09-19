@@ -27,7 +27,7 @@ function setup() {
     inputValue(width * 0.285, height * 0.77, "val_8");
 
     button = createButton("Submit")
-    button.position(0, 0)
+    button.position(width * 0.7, height * 0.8)
     button.mousePressed(() => alert("hello"))
 
 }
