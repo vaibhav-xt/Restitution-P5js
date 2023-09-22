@@ -13,7 +13,7 @@ let mgDownPoints = [];
 // plus display points
 let plusUpward = [];
 let plusDownward = [];
-
+let dotted;
 
 function setup() {
     // Aspect Ratio 1:1
@@ -58,6 +58,8 @@ function setup() {
         isDragging[i] = false;
     }
 
+    dotted = loadImage("./image/dotted.svg")
+
     background(220);
     angleMode(DEGREES);
 }
@@ -87,6 +89,7 @@ function draw() {
     }
 
     submit()
+    // image(dotted, 100, 100)
 }
 
 function submit() {
@@ -102,22 +105,7 @@ function submit() {
 }
 
 function ballPath() {
-    push();
-    noFill();
-    stroke(0, 0, 0, 50);
-    beginShape();
-    curveVertex(width * 0.16, height * 0.34);
-    curveVertex(width * 0.16, height * 0.05);
-    curveVertex(width * 0.22, height * 0.35);
-    curveVertex(width * 0.33, height * 0.10);
-    curveVertex(width * 0.43, height * 0.35);
-    curveVertex(width * 0.52, height * 0.15);
-    curveVertex(width * 0.63, height * 0.35);
-    curveVertex(width * 0.7, height * 0.25);
-    curveVertex(width * 0.80, height * 0.35);
-    curveVertex(width * 0.85, height * 0.34);
-    endShape();
-    pop();
+    image(dotted, width * 0.16, height * 0.07, width * 0.65, height * 0.3);
 
     push()
     fill(255, 255, 255);
