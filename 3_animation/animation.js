@@ -1,84 +1,153 @@
 const widthHeight = 500;
-let val_1 = 0;
-let val_2 = 0;
-let val_3 = 0;
-let val_4 = 0;
-let val_5 = 0;
-let val_6 = 0;
-let val_7 = 0;
-let val_8 = 0;
-let val_9 = 0;
+let initialPoints = [];
+let dotted_1;
+let dotted_2;
+let dotted_3;
+let dotted_4;
+
+let ballPathFlag = {};
 let button;
+
+// Vales 
+let val_1;
+let val_2;
+let val_3;
+let val_4;
 
 function setup() {
     createCanvas(widthHeight, widthHeight);
+    angleMode(DEGREES);
 
-    inputValue(width * 0.23, height * 0.28, "val_1");
-    inputValue(width * 0.36, height * 0.28, "val_2");
 
-    inputValue(width * 0.23, height * .48, "val_3");
-    inputValue(width * 0.37, height * 0.48, "val_4");
+    initialPoints = [
+        // Arrows arguments [x, y, arrowLength, label, degree]
+        [width * 0.15, height * 0.15, width * 0.2, `t0`, 0, 0],
+        [width * 0.3, height * 0.35, width * 0.15, "", 180, 180],
+        [width * 0.35, height * 0.20, width * 0.15, "et0", 0, 0],
+        [width * 0.50, height * 0.35, width * 0.10, "", 180, 180],
+        [width * 0.55, height * 0.25, width * 0.10, "(e^2)t0", 0, 0],
+        [width * 0.70, height * 0.35, width * 0.05, "", 180, 180],
+        [width * 0.75, height * 0.30, width * 0.05, "(e^n)t0", 0, 0]
+    ]
 
-    inputValue(width * 0.23, height * .54, "val_5");
-    inputValue(width * 0.37, height * 0.54, "val_6");
+    // Input Boxes
+    inputValue(width * 0.3, height * 0.53, "val_1");
+    inputValue(width * 0.3, height * 0.63, "val_2");
+    inputValue(width * 0.3, height * 0.73, "val_3");
 
-    inputValue(width * 0.23, height * 0.7, "val_7");
-    inputValue(width * 0.325, height * 0.7, "val_8");
-    inputValue(width * 0.285, height * 0.77, "val_8");
+
+    dotted_1 = loadImage("./images/dotted_1.svg")
+    dotted_2 = loadImage("./images/dotted_2.svg")
+    dotted_3 = loadImage("./images/dotted_3.svg")
+    dotted_4 = loadImage("./images/dotted_4.svg")
 
     button = createButton("Submit")
-    button.position(width * 0.7, height * 0.8)
-    button.mousePressed(() => alert("hello"))
-
+    button.position(width * 0.4, height * 0.93)
+    button.class('button')
 }
 
 function inputValue(x, y, whichValue) {
-    const inp = createInput('', 'number');
+    const inp = createInput('');
     inp.position(x, y);
     inp.style("width", `${width * 0.06}px`);
     inp.input(function () {
         if (whichValue === "val_1") val_1 = inp.value();
         if (whichValue === "val_2") val_2 = inp.value();
         if (whichValue === "val_3") val_3 = inp.value();
-        if (whichValue === "val_4") val_4 = inp.value();
-        if (whichValue === "val_5") val_5 = inp.value();
-        if (whichValue === "val_6") val_6 = inp.value();
-        if (whichValue === "val_7") val_7 = inp.value();
-        if (whichValue === "val_8") val_8 = inp.value();
-        if (whichValue === "val_9") val_9 = inp.value();
     });
 }
 
 function draw() {
-    background(220)
-    // console.log("val_1", val_1);
-    // console.log("val_2", val_2);
-    // console.log("val_3", val_3);
-    // console.log("val_4", val_4);
-    // console.log("val_5", val_5);
-    // console.log("val_6", val_6);
-    // console.log("val_7", val_7);
-    // console.log("val_8", val_8);
-    // console.log("val_9", val_9);
-    // Text 
-    displayText("T =", width * 0.1, height * 0.3, width * 0.05)
-    displayText("+", width * 0.3, height * 0.3, width * 0.05)
+    background(245);
 
-    displayText("T =", width * 0.1, height * 0.53, width * 0.05)
-    displayText("+", width * 0.3, height * 0.53, width * 0.05)
-    line(width * 0.21, height * 0.515, width * 0.28, height * 0.515)
-    line(width * 0.35, height * 0.515, width * 0.43, height * 0.515)
+    arrowRotation(...initialPoints[0])
 
-    displayText("T =", width * 0.1, height * 0.75, width * 0.05)
-    displayText("(      )", width * 0.29, height * 0.72, width * 0.05)
-    displayText("(      )", width * 0.25, height * 0.79, width * 0.05)
-    line(width * 0.21, height * 0.74, width * 0.4, height * 0.74)
+    if (val_1 === "e") ballPathFlag.val_1 = true;
+    if (val_2 === "e^2") ballPathFlag.val_2 = true;
+    if (val_3 === "e^n") ballPathFlag.val_3 = true;
+
+    fill(216, 27, 96)
+    image(dotted_1, width * 0.127, height * 0.09, width * 0.1, height * 0.28);
+    if (ballPathFlag.val_1) {
+        arrowRotation(...initialPoints[1])
+        arrowRotation(...initialPoints[2])
+        image(dotted_2, width * 0.23, height * 0.12, width * 0.19, height * 0.25);
+
+        if (!ballPathFlag.val_2) circle(width * 0.43, height * 0.35, width * 0.06)
+
+        if (ballPathFlag.val_2) {
+            arrowRotation(...initialPoints[3])
+            arrowRotation(...initialPoints[4])
+            image(dotted_3, width * 0.422, height * 0.154, width * 0.19, height * 0.22);
+            if (!ballPathFlag.val_3) circle(width * 0.63, height * 0.35, width * 0.06)
+
+            if (ballPathFlag.val_3) {
+                arrowRotation(...initialPoints[5])
+                arrowRotation(...initialPoints[6])
+                image(dotted_4, width * 0.615, height * 0.225, width * 0.19, height * 0.15);
+                circle(width * 0.81, height * 0.35, width * 0.06)
+            }
+        }
+    }
+
+
+    sizeText("T1 =         t0", width * 0.2, height * 0.55, 0, width * 0.04)
+    sizeText("T2 =         t0", width * 0.2, height * 0.65, 0, width * 0.04)
+    sizeText("Tn =         t0", width * 0.2, height * 0.75, 0, width * 0.04)
+
+    if (!ballPathFlag.val_1) circle(width * 0.153, height * 0.1, width * 0.06)
+
+    button.mousePressed(() => {
+        if (ballPathFlag.val_1 && ballPathFlag.val_2 && ballPathFlag.val_3) {
+            alert("Welldone!")
+        } else {
+            alert("Try again!")
+        }
+    })
+
+    push()
+    fill(220)
+    rect(0, height - height * 0.1, width, height * 0.1)
+    pop()
 }
 
-function displayText(label, xText, yText, size = width * 0.025) {
+
+
+// Text Function 
+function sizeText(label, xText, yText, deg, size = width * 0.03) {
     push();
+    fill(0)
     textSize(size);
-    translate(xText, yText)
+    translate(deg === 180 ? xText : xText - 5, yText)
+    rotate(deg)
     text(label, 0, 0);
     pop();
+}
+
+function arrowRotation(xArrowAngle, yArrowAngle, arrowLength, label, deg, textDeg) {
+    push()
+    translate(xArrowAngle, yArrowAngle)
+    rotate(deg)
+    drawArrow(0, 0, arrowLength, label, textDeg)
+    pop()
+}
+
+function drawArrow(xArrow, yArrow, arrowLength, label, textDeg) {
+    rectMode(CENTER);
+    line(xArrow, yArrow, xArrow, yArrow + arrowLength);
+    stroke(1)
+    if (textDeg === 0) {
+        sizeText(label, label === "t0" ? xArrow : xArrow - width * 0.05, yArrow + arrowLength + height * 0.05, textDeg);
+    }
+    if (textDeg === 180) {
+        sizeText(label, xArrow + width * 0.05, yArrow - height * 0.04, textDeg);
+    }
+
+    let arrowSize = 10;
+    let arrowX1 = xArrow - arrowSize / 2;
+    let arrowX2 = xArrow + arrowSize / 2;
+    let arrowY = yArrow + arrowLength;
+
+    fill(0);
+    triangle(arrowX1, arrowY, arrowX2, arrowY, xArrow, arrowY + arrowSize);
 }

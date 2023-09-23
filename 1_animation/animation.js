@@ -66,7 +66,7 @@ function setup() {
 }
 
 function draw() {
-    background(220);
+    background(245);
 
     // arrows
     for (let i = 0; i < initialPoints.length; i++) {
@@ -89,15 +89,15 @@ function draw() {
         sizeText(...plusDownward[i])
     }
 
-    // for (let i = 0; i < mgUpPoints.length; i++) {
-    //     rect(...mgUpPoints[i])
-    // }
-    // image(dotted, 100, 100)
+    push()
+    fill(220)
+    rect(0, height - height * 0.1, width, height * 0.1)
+    pop()
 }
 
 function submit() {
     button = createButton("Submit");
-    button.position(width * 0.75, height * 0.8)
+    button.position(width * 0.4, height * 0.93)
     button.class("button")
     button.mousePressed(() => {
         if (verify()) {
@@ -112,7 +112,7 @@ function ballPath() {
     image(dotted, width * 0.16, height * 0.07, width * 0.65, height * 0.3);
 
     push()
-    fill(255, 255, 255);
+    fill(216, 27, 96)
     circle(width * 0.16, height * 0.07, width * 0.05)
     circle(width * 0.325, height * 0.10, width * 0.05)
     circle(width * 0.525, height * 0.15, width * 0.05)
@@ -121,7 +121,7 @@ function ballPath() {
 }
 
 // Text Function 
-function sizeText(label, xText, yText, deg, size = width * 0.025) {
+function sizeText(label, xText, yText, deg, size = width * 0.03) {
     push();
     textSize(size);
     translate(deg === 180 ? xText : xText - 5, yText)
@@ -142,7 +142,8 @@ function drawArrow(xArrow, yArrow, arrowLength, label, textDeg) {
     rectMode(CENTER);
     // Draw the arrow line
     line(xArrow, yArrow, xArrow, yArrow + arrowLength);
-    sizeText(label, xArrow, yArrow - 15, textDeg);
+    stroke(1)
+    sizeText(label, textDeg === 180 ? xArrow + 3 : xArrow, textDeg === 180 ? yArrow - 15 : yArrow - 10, textDeg);
 
     // Calculate arrowhead coordinates
     let arrowSize = 10;

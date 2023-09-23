@@ -7,6 +7,10 @@ let ballBounce = {
     direction: "down"
 };
 let variableArrowLength;
+let buttonClicked = false;
+let initialSliderValue;
+
+
 
 function setup() {
     createCanvas(widthHeight, widthHeight);
@@ -21,39 +25,31 @@ function setup() {
 }
 
 function draw() {
-    background(220);
-    // example();
+    background(245);
+    push()
     playFlag ? bouncingBall() : example();
+    pop()
+
+    textDisplay(slider.value(), width * 0.5 - 13, height * 0.68)
 
     push()
-    stroke(216, 27, 96)
-    textDisplay(slider.value(), width * 0.5 - 13, height * 0.68)
-    fill(216, 27, 96)
+    fill(220)
+    rect(0, height - height * 0.1, width, height * 0.1)
     pop()
-    // bouncingBall();
 }
 
 function bouncingBall() {
     const { speed, direction } = ballBounce;
-
     // Line
     line(width * 0.3, height * 0.5, width * 0.7, height * 0.5);
 
-    // Arrow 1
-    arrowRotation(width * 0.4, height * 0.155, bounceBackFlag ? width * 0.32 : height * 0.04 + speed * 5.05, 0, 2);
-    textDisplay(`t1 = 1 sec`, width * 0.28, height * 0.45);
+    arrowRotation(width * 0.4, height * 0.16, bounceBackFlag ? width * 0.32 : height * 0.04 + speed * 5.05, 0, 2);
+    textDisplay(`t1= 1sec`, width * 0.25, height * 0.45)
 
-    // Arrow 2
-    let arrowY;
-    if (bounceBackFlag) {
-        arrowY = width * 0.5 - (height * 0.18 + speed * 5);
-    } else {
-        arrowY = 0;
-    }
-    arrowRotation(width * 0.6, height * 0.499, arrowY, 180, 2);
-    textDisplay(`t2 = ${slider.value()} sec`, width * 0.65, height * 0.45);
+    arrowRotation(width * 0.6, height * 0.5, bounceBackFlag ? initialSliderValue === 0 ? 0 : width * 0.5 - (height * 0.18 + speed * 5) : 0, 180, 2);
+    textDisplay(`t2= ${initialSliderValue}sec`, width * 0.63, height * 0.45)
 
-    // Ball
+    fill(216, 27, 96)
     const ballY = height * 0.2 + speed * 5;
     circle(width * 0.50, ballY, width * 0.08);
 
@@ -66,14 +62,13 @@ function bouncingBall() {
         }
     }
 
-    // Uncomment this section if needed
-    // if (slider.value() !== 0) {
-    if (direction === "up") {
-        if (variableArrowLength <= ballY) {
-            ballBounce.speed -= 0.5;
+    if (initialSliderValue !== 0) {
+        if (direction === "up") {
+            if (variableArrowLength < ballY) {
+                ballBounce.speed -= 0.5;
+            }
         }
     }
-    // }
 }
 
 
@@ -81,10 +76,11 @@ function bouncingBall() {
 function example() {
     // Arrows 
     arrowRotation(width * 0.4, height * 0.17, width * 0.3, 0);
+
     arrowRotation(width * 0.6, height * 0.495, width * slider.value() * 0.3, 180);
 
     // Text 
-    textDisplay('V(approach)', width * 0.33, height * 0.15);
+    textDisplay('V(approach)', width * 0.31, height * 0.15);
     textDisplay('V(separation)', width * 0.53, height * 0.15);
 
     // Line
@@ -98,17 +94,22 @@ function example() {
 
 function playButton() {
     button = createButton("Play");
-    button.position(width * 0.47, height * 0.8)
+    button.position(width * 0.4, height * 0.93)
     button.class('button')
     button.mousePressed(() => {
-        playFlag = true;
-        variableArrowLength = height * 0.5 - width * slider.value() * 0.3;
-    })
+        if (!buttonClicked) {
+            playFlag = true;
+            variableArrowLength = height * 0.5 - width * slider.value() * 0.3;
+            buttonClicked = true; // Set the flag to true after the first click
+            initialSliderValue = slider.value();
+        }
+    });
 }
 
 // Display Text 
-function textDisplay(label, xText, yText, size = width * 0.025) {
+function textDisplay(label, xText, yText, size = width * 0.03) {
     push();
+    stroke(2)
     textSize(size);
     text(label, xText, yText);
     pop();
@@ -116,24 +117,22 @@ function textDisplay(label, xText, yText, size = width * 0.025) {
 
 // Rotate Arrow 
 function arrowRotation(xArrowAngle, yArrowAngle, arrowLength, deg, weight = widthHeight * 0.007) {
+    let c = (deg === 180) ? color(255, 153, 0) : color(102, 0, 255);
     push();
+    stroke(c)
+    fill(c)
     strokeWeight(weight)
     translate(xArrowAngle, yArrowAngle);
     rotate(deg);
-    drawArrow(0, 0, arrowLength);
+    drawArrow(0, 0, arrowLength, deg);
     pop();
 }
 
 // Draw Arrow 
-function drawArrow(xArrow, yArrow, arrowLength) {
+function drawArrow(xArrow, yArrow, arrowLength, deg) {
     rectMode(CENTER);
 
     push();
-
-    // Set the fill color for the arrow
-    let c = color(94, 53, 177);
-    stroke(c);
-    // Draw the arrow line
     line(xArrow, yArrow, xArrow, yArrow + arrowLength);
 
     // Calculate the coordinates for the arrowhead
@@ -143,9 +142,7 @@ function drawArrow(xArrow, yArrow, arrowLength) {
     let arrowY = yArrow + arrowLength;
 
     // Draw the arrowhead
-    fill(c);
     triangle(arrowX1, arrowY, arrowX2, arrowY, xArrow, arrowY + arrowSize);
-    // fill(0);
 
-    pop(); // Restore the fill color
+    pop();
 }
