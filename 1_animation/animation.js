@@ -31,10 +31,10 @@ function setup() {
     ]
 
     mgUpPoints = [
-        [width * 0.22, height * 0.47, width * 0.07, height * 0.15],
-        [width * 0.32, height * 0.47, width * 0.07, height * 0.15],
-        [width * 0.42, height * 0.47, width * 0.07, height * 0.15],
-        [width * 0.52, height * 0.47, width * 0.07, height * 0.15],
+        [width * 0.25, height * 0.47, width * 0.07, height * 0.15],
+        [width * 0.35, height * 0.47, width * 0.07, height * 0.15],
+        [width * 0.45, height * 0.47, width * 0.07, height * 0.15],
+        [width * 0.55, height * 0.47, width * 0.07, height * 0.15],
     ]
 
     mgDownPoints = [
@@ -44,14 +44,14 @@ function setup() {
     ]
 
     plusUpward = [
-        ["+", width * 0.30, height * 0.55],
-        ["+", width * 0.40, height * 0.55],
-        ["+", width * 0.50, height * 0.55]
+        ["+", width * 0.335, height * 0.55],
+        ["+", width * 0.435, height * 0.55],
+        ["+", width * 0.535, height * 0.55]
     ]
 
     plusDownward = [
-        ["+", width * 0.33, height * 0.80],
-        ["+", width * 0.43, height * 0.80]
+        ["+", width * 0.35, height * 0.80],
+        ["+", width * 0.45, height * 0.80]
     ]
 
     for (let i = 0; i < 7; i++) {
@@ -62,6 +62,7 @@ function setup() {
 
     background(220);
     angleMode(DEGREES);
+    submit()
 }
 
 function draw() {
@@ -88,13 +89,16 @@ function draw() {
         sizeText(...plusDownward[i])
     }
 
-    submit()
+    // for (let i = 0; i < mgUpPoints.length; i++) {
+    //     rect(...mgUpPoints[i])
+    // }
     // image(dotted, 100, 100)
 }
 
 function submit() {
     button = createButton("Submit");
-    button.position(width * 0.8, height * 0.8)
+    button.position(width * 0.75, height * 0.8)
+    button.class("button")
     button.mousePressed(() => {
         if (verify()) {
             alert("Well Done!")
@@ -110,9 +114,9 @@ function ballPath() {
     push()
     fill(255, 255, 255);
     circle(width * 0.16, height * 0.07, width * 0.05)
-    circle(width * 0.32, height * 0.10, width * 0.05)
-    circle(width * 0.52, height * 0.15, width * 0.05)
-    circle(width * 0.70, height * 0.24, width * 0.05)
+    circle(width * 0.325, height * 0.10, width * 0.05)
+    circle(width * 0.525, height * 0.15, width * 0.05)
+    circle(width * 0.73, height * 0.22, width * 0.05)
     pop()
 }
 

@@ -45,6 +45,7 @@ function setup() {
 
     button = createButton("Submit")
     button.position(width * 0.7, height * 0.8)
+    button.class('button')
 }
 
 function inputValue(x, y, whichValue) {
@@ -55,7 +56,6 @@ function inputValue(x, y, whichValue) {
         if (whichValue === "val_1") val_1 = inp.value();
         if (whichValue === "val_2") val_2 = inp.value();
         if (whichValue === "val_3") val_3 = inp.value();
-        // if (whichValue === "val_4") val_4 = inp.value();
     });
 }
 
@@ -63,44 +63,43 @@ function draw() {
     background(220);
 
     // arrows
-    for (let i = 0; i < initialPoints.length; i++) {
-        arrowRotation(...initialPoints[i])
-    }
+    // for (let i = 0; i < initialPoints.length; i++) {
+    //     arrowRotation(...initialPoints[i])
+    // }
+
+    arrowRotation(...initialPoints[0])
 
     if (val_1 === "e") ballPathFlag.val_1 = true;
     if (val_2 === "e^2") ballPathFlag.val_2 = true;
     if (val_3 === "e^n") ballPathFlag.val_3 = true;
-    // if (val_4 === "e^n") ballPathFlag.val_4 = true;
 
-    // image(dotted_1, width * 0.14, height * 0.07, width * 0.1, height * 0.3);
+    image(dotted_1, width * 0.127, height * 0.09, width * 0.1, height * 0.28);
     if (ballPathFlag.val_1) {
+        arrowRotation(...initialPoints[1])
+        arrowRotation(...initialPoints[2])
         image(dotted_2, width * 0.23, height * 0.12, width * 0.19, height * 0.25);
+
         if (!ballPathFlag.val_2) circle(width * 0.43, height * 0.35, width * 0.06)
 
         if (ballPathFlag.val_2) {
+            arrowRotation(...initialPoints[3])
+            arrowRotation(...initialPoints[4])
             image(dotted_3, width * 0.422, height * 0.154, width * 0.19, height * 0.22);
             if (!ballPathFlag.val_3) circle(width * 0.63, height * 0.35, width * 0.06)
 
             if (ballPathFlag.val_3) {
+                arrowRotation(...initialPoints[5])
+                arrowRotation(...initialPoints[6])
                 image(dotted_4, width * 0.615, height * 0.225, width * 0.19, height * 0.15);
                 circle(width * 0.81, height * 0.35, width * 0.06)
             }
         }
     }
 
-    // if (ballPathFlag.val_2) {
-    // }
-
-    // image(dotted_3, width * 0.432, height * 0.154, width * 0.19, height * 0.22);
-    // image(dotted_4, width * 0.625, height * 0.225, width * 0.19, height * 0.15);
-
-    // circle(width * 0.63, height * 0.35, width * 0.06)
-    // circle(width * 0.83, height * 0.35, width * 0.06)
 
     sizeText("T1 =         t0", width * 0.2, height * 0.55, 0, width * 0.04)
     sizeText("T2 =         t0", width * 0.2, height * 0.65, 0, width * 0.04)
     sizeText("Tn =         t0", width * 0.2, height * 0.75, 0, width * 0.04)
-    // sizeText("Tn =         t0", width * 0.2, height * 0.85, 0, width * 0.04)
 
     if (!ballPathFlag.val_1) circle(width * 0.153, height * 0.1, width * 0.06)
 

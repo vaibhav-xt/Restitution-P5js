@@ -17,26 +17,43 @@ function setup() {
     slider = createSlider(0, 1, 0.5, 0.1);
     slider.position(width * 0.5 - width * 0.25, height * 0.70);
     slider.style('width', `${width * 0.5}px`);
+    playButton()
 }
 
 function draw() {
     background(220);
     // example();
     playFlag ? bouncingBall() : example();
-    playButton();
+
+    push()
+    stroke(216, 27, 96)
+    textDisplay(slider.value(), width * 0.5 - 13, height * 0.68)
+    fill(216, 27, 96)
+    pop()
+    // bouncingBall();
 }
 
 function bouncingBall() {
     const { speed, direction } = ballBounce;
+
     // Line
     line(width * 0.3, height * 0.5, width * 0.7, height * 0.5);
 
-    arrowRotation(width * 0.4, height * 0.16, bounceBackFlag ? width * 0.32 : height * 0.04 + speed * 5.05, 0, 2);
-    textDisplay(`t1= 1sec`, width * 0.28, height * 0.45)
+    // Arrow 1
+    arrowRotation(width * 0.4, height * 0.155, bounceBackFlag ? width * 0.32 : height * 0.04 + speed * 5.05, 0, 2);
+    textDisplay(`t1 = 1 sec`, width * 0.28, height * 0.45);
 
-    arrowRotation(width * 0.6, height * 0.5, bounceBackFlag ? slider.value() === 0 ? 0 : width * 0.5 - (height * 0.18 + speed * 5) : 0, 180, 2);
-    textDisplay(`t2= ${slider.value()}sec`, width * 0.65, height * 0.45)
+    // Arrow 2
+    let arrowY;
+    if (bounceBackFlag) {
+        arrowY = width * 0.5 - (height * 0.18 + speed * 5);
+    } else {
+        arrowY = 0;
+    }
+    arrowRotation(width * 0.6, height * 0.499, arrowY, 180, 2);
+    textDisplay(`t2 = ${slider.value()} sec`, width * 0.65, height * 0.45);
 
+    // Ball
     const ballY = height * 0.2 + speed * 5;
     circle(width * 0.50, ballY, width * 0.08);
 
@@ -49,21 +66,22 @@ function bouncingBall() {
         }
     }
 
-    if (slider.value() !== 0) {
-        if (direction === "up") {
-            if (variableArrowLength < ballY) {
-                ballBounce.speed -= 0.5;
-            }
+    // Uncomment this section if needed
+    // if (slider.value() !== 0) {
+    if (direction === "up") {
+        if (variableArrowLength <= ballY) {
+            ballBounce.speed -= 0.5;
         }
     }
+    // }
 }
 
 
 
 function example() {
     // Arrows 
-    arrowRotation(width * 0.4, height * 0.18, width * 0.3, 0);
-    arrowRotation(width * 0.6, height * 0.5, width * slider.value() * 0.3, 180);
+    arrowRotation(width * 0.4, height * 0.17, width * 0.3, 0);
+    arrowRotation(width * 0.6, height * 0.495, width * slider.value() * 0.3, 180);
 
     // Text 
     textDisplay('V(approach)', width * 0.33, height * 0.15);
@@ -73,18 +91,15 @@ function example() {
     line(width * 0.3, height * 0.5, width * 0.7, height * 0.5)
 
     // Circle 
+    fill(216, 27, 96)
     circle(width * 0.50, height * 0.46, width * 0.08);
 
 }
 
 function playButton() {
-    push()
-    stroke(3)
-    fill(255, 0, 0)
-    textDisplay(slider.value(), width * 0.5 - 13, height * 0.68)
-    pop()
     button = createButton("Play");
     button.position(width * 0.47, height * 0.8)
+    button.class('button')
     button.mousePressed(() => {
         playFlag = true;
         variableArrowLength = height * 0.5 - width * slider.value() * 0.3;
@@ -113,13 +128,24 @@ function arrowRotation(xArrowAngle, yArrowAngle, arrowLength, deg, weight = widt
 function drawArrow(xArrow, yArrow, arrowLength) {
     rectMode(CENTER);
 
+    push();
+
+    // Set the fill color for the arrow
+    let c = color(94, 53, 177);
+    stroke(c);
+    // Draw the arrow line
     line(xArrow, yArrow, xArrow, yArrow + arrowLength);
 
+    // Calculate the coordinates for the arrowhead
     let arrowSize = 10;
     let arrowX1 = xArrow - arrowSize / 2;
     let arrowX2 = xArrow + arrowSize / 2;
     let arrowY = yArrow + arrowLength;
 
-    fill(0);
+    // Draw the arrowhead
+    fill(c);
     triangle(arrowX1, arrowY, arrowX2, arrowY, xArrow, arrowY + arrowSize);
+    // fill(0);
+
+    pop(); // Restore the fill color
 }
