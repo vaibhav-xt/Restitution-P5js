@@ -46,11 +46,19 @@ function bouncingBall() {
     arrowRotation(width * 0.4, height * 0.16, bounceBackFlag ? width * 0.32 : height * 0.04 + speed * 5.05, 0, 2);
     textDisplay(`t1= 1sec`, width * 0.25, height * 0.45)
 
-    arrowRotation(width * 0.6, height * 0.5, bounceBackFlag ? initialSliderValue === 0 ? 0 : width * 0.5 - (height * 0.18 + speed * 5) : 0, 180, 2);
+    let arrowLength;
+    if (bounceBackFlag) {
+        if (initialSliderValue === 0) arrowLength = 0;
+        else arrowLength = height * 0.5 - (height * 0.18 + speed * 5);
+    } else {
+        arrowLength = 0;
+    }
+
+    arrowRotation(width * 0.6, height * 0.5, bounceBackFlag ? initialSliderValue === 0 ? 0 : height * 0.5 - (height * 0.18 + speed * 5) : 0, 180, 2);
     textDisplay(`t2= ${initialSliderValue}sec`, width * 0.63, height * 0.45)
 
     fill(216, 27, 96)
-    const ballY = height * 0.2 + speed * 5;
+    let ballY = initialSliderValue === 0.1 && ballBounce.direction === "up" ? height * 0.45 : height * 0.2 + speed * 5;
     circle(width * 0.50, ballY, width * 0.08);
 
     if (direction === "down") {
