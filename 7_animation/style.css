@@ -1,0 +1,22 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+canvas {
+  display: block;
+}
+
+.btn1:hover,
+.btn2:hover,
+.btn3:hover {
+  color: white;
+  background-color: black;
+}
+
+.btn1,
+.btn2,
+.btn3 {
+  cursor: pointer;
+}
